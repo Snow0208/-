@@ -1,0 +1,12 @@
+#!/bin/bash -x
+#PBS -N emapper
+#PBS -o emapper1.log
+#PBS -e vasp.err
+#PBS -q workq
+#PBS -j oe
+#PBS -l nodes=s002:ppn=20
+
+cd $PBS_O_WORKDIR
+date -R
+
+python /share/home/stu_lizhen/software/eggnog-mapper/emapper.py -i 12-0vs13-0.pep.fa --output 12-0vs13-0 -m diamond --cpu 20
