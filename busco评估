@@ -1,0 +1,15 @@
+###非模式生物进行注释
+
+#!/bin/bash -x
+#PBS -N busco
+#PBS -o busco.log
+#PBS -e busco.err
+#PBS -q workq
+#PBS -j oe
+#PBS -l nodes=4:ppn=5
+
+cd $PBS_O_WORKDIR
+
+source activate busco
+
+run_BUSCO.py -i /share/home/stu_jiahaifeng/project/lixueting/gene_anno/GZ.pep.fa -l /share/home/stu_jiahaifeng/software/embryophyta_odb10 -o gz_pep -m proteins -c 20
