@@ -10,3 +10,35 @@ cd $PBS_O_WORKDIR
 date -R
 
 python /share/home/stu_lizhen/software/eggnog-mapper/emapper.py -i 12-0vs13-0.pep.fa --output 12-0vs13-0 -m diamond --cpu 20
+
+
+
+############################################
+perl脚本
+#! usr/bin/perl
+# maxk 2017.03.21
+use strict;
+use warnings;
+my $threads = shift @ARGV;
+
+my $tmp = `find -name '*.fasta'`;
+my @tmpdb = split (/\n/,$tmp);
+foreach my $i(0..$#tmpdb){
+	my $name=$tmpdb[$i];
+	$name =~ s/.fasta//;
+	my $prefix = (split /\//,$name)[-1];
+	#print "$prefix\n";
+	open(OUT,">run000000000_$prefix.sh") or die "Not found the file : $name.\n";
+	print OUT "#! bin/sh
+#\$ -pe mpi 2
+#\$ -cwd
+#\$ -S /bin/bash
+#\$ -q all.q
+
+export PATH=/public1/home/stu_yangxiaoyi/anaconda3/envs/eggnog/bin:\$PATH
+/public1/home/stu_yangxiaoyi/anaconda3/envs/eggnog/bin/emapper.py --cpu 2 -i $prefix\.fasta --output $prefix\ -d virNOG\ --tax_scope 33090
+
+
+	";
+	close OUT;
+}
